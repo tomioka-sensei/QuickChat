@@ -1,25 +1,14 @@
 const express = require("express");
 const { chats } = require("./Data/data");
 const app = express();
-
+const connectDb = require("./config/db")
+const userRoutes = require("./routes/userRoutes")
 const dotenv = require("dotenv")
  dotenv.config();
+ connectDb();
 
 
-
-
-app.get("/api/chat/:id",(req,res)=>{
-    // console.log(req.params.id)
-    const singleChat = chats.find((c)=> c._id === req.params.id)
-    res.send(singleChat);
-
-})
-
-app.get("/api/chat",(req,res)=>{
-    res.send(chats);
-
-
-})
+app.use("/api/user",userRoutes)
 
 app.get("/",(req,res)=>{
     res.send("api is working")

@@ -64,7 +64,7 @@ const Login = () => {
 </FormControl>
 
 <Button colorScheme='blue' variant='solid'>
-    Lets Chat
+    Lets chat 
   </Button>
 
   <Button colorScheme='red' variant='solid' gap={1}>
