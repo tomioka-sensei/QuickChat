@@ -6,6 +6,7 @@ const userRoutes = require("./routes/userRoutes")
 const dotenv = require("dotenv")
  dotenv.config();
  connectDb();
+ app.use(express.json()); // to use frontend data
 
 
 app.use("/api/user",userRoutes)

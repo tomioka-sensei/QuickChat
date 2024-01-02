@@ -1,10 +1,11 @@
  const asyncHandler = require("express-async-handler");
-const User = require("../Models/messageModel")
+const User = require("../Models/userModel")
+const generateToken =  require("../config/generateToken")
  
  const registerUser =  asyncHandler(async(req,res) =>{
   const {name, email,password,pic} = req.body;
     
-    if(!name || email || password){
+    if(!name || !email || !password){
         resizeBy.status(400);
         throw new Error("please enter all the fields");
     }
@@ -29,6 +30,8 @@ const User = require("../Models/messageModel")
             name: user.name,
             email:user.email,
             pic: user.pic,
+            token: generateToken(user._id),
+
         })
     } else{
         res.status(400);
