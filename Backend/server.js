@@ -3,13 +3,16 @@ const { chats } = require("./Data/data");
 const app = express();
 const connectDb = require("./config/db")
 const userRoutes = require("./routes/userRoutes")
-const dotenv = require("dotenv")
+const dotenv = require("dotenv");
+const { notFound, errorHandler } = require("./middleware/errorMiddleware");
  dotenv.config();
  connectDb();
  app.use(express.json()); // to use frontend data
 
 
 app.use("/api/user",userRoutes)
+app.use(notFound)
+app.use(errorHandler)
 
 app.get("/",(req,res)=>{
     res.send("api is working")
