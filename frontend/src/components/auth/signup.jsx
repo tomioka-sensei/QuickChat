@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import {  VStack , StackDivider , Box ,InputGroup } from '@chakra-ui/react'
+import { useToast } from '@chakra-ui/react'
 import {
     FormControl,
     FormLabel,
@@ -23,7 +24,53 @@ const Signup = () => {
 
    const [photo , setPhoto] = useState()
 
-   const fileSelect = (pics)=>{}
+   const[loading , setLoading ] = useState(false)
+   const toast = useToast()
+
+
+   const fileSelect = (pics)=>{
+      setLoading(true)
+       if(pics===undefined){ 
+        toast({
+        title: 'Invalid Req.',
+        description: "picture is required",
+        status: 'warning',
+        duration: 9000,
+        isClosable: true,
+      });
+      return;
+       };
+
+       if(pics.type === image/jpeg || pics.type === image/png){
+        const data = new FormData();
+        data.append("file",pics);
+        data.append("upload_preset","Quick-Chat");
+        data.append("cloud_name", "dgozpfjis");
+        fetch("https://api.cloudinary.com/v1_1/dgozpfjis/image/upload",{
+          method: "post",
+          body: data,
+        }).then((res)=>res.json())
+        .then((data=>{
+          setPhoto(data.url.toString());
+          setLoading(false)
+        })).catch((err) => {
+          console.log(err);
+          setLoading(false)
+        });
+       }else{
+        toast({
+          title: 'Invalid Req.',
+          description: "picture is required",
+          status: 'warning',
+          duration: 9000,
+          isClosable: true,
+        });
+
+        setLoading(false)
+       }
+
+      
+   }
 
    const clickHandler = ()=>{
     setShow(show=>!show)
@@ -112,7 +159,13 @@ const Signup = () => {
 </FormControl>
 
 
-<Button colorScheme='blue' variant='solid' onClick={submitHandler}>
+<Button colorScheme='blue'
+
+variant='solid' 
+onClick={submitHandler}
+isLoading={loading}
+
+>
     Submit
   </Button>
 
