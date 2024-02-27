@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
 import {  VStack , StackDivider , Box ,InputGroup } from '@chakra-ui/react'
 import { useToast } from '@chakra-ui/react'
+import {axios} from "axios"
+import {useHistory} from "react-router-dom"
+
 import {
     FormControl,
     FormLabel,
@@ -26,7 +29,7 @@ const Signup = () => {
 
    const[loading , setLoading ] = useState(false)
    const toast = useToast()
-
+    const history = useHistory();
 
    const fileSelect = (pics)=>{
       setLoading(true)
@@ -41,7 +44,7 @@ const Signup = () => {
       return;
        };
 
-       if(pics.type === image/jpeg || pics.type === image/png){
+       if(pics.type === "image/jpeg" || pics.type === "image/png"){
         const data = new FormData();
         data.append("file",pics);
         data.append("upload_preset","Quick-Chat");
@@ -76,8 +79,68 @@ const Signup = () => {
     setShow(show=>!show)
    }
 
-   const submitHandler = ()=>{
-    
+   const submitHandler = async()=>{
+    setLoading(true);
+      if(!name||!email||!pass||!confirm){
+        
+        toast({
+          title: 'Invalid Req.',
+          description: "please fill all the required fields",
+          status: 'warning',
+          duration: 9000,
+          isClosable: true,
+        });
+         
+        setLoading(false);
+        return;
+      }
+
+      if(pass !==confirm){
+        
+        toast({
+          title: 'password does not match',
+          description: "please enter a valid password",
+          status: 'warning',
+          duration: 9000,
+          isClosable: true,
+        });
+        return;            
+      }
+
+       try {
+        const config = {
+          headers:{
+            'Content-Type': 'application/json'
+
+          },
+
+        }
+
+        const {data} = await axios.post("/api/user",
+        {name,email,pass,photo},
+        config);
+
+        toast({
+          title: 'success',
+          description: "registration was sucessful",
+          status: 'success',
+          duration: 9000,
+          isClosable: true,
+        });
+           localStorage.setItem("userInfo",JSON.stringify(data));
+           setLoading(false);
+           history.push("/chats")
+       } catch (error) {
+        toast({
+          title: 'Error',
+          description: error.response.data.message,
+          status: 'warning',
+          duration: 9000,
+          isClosable: true,
+        });
+
+        setLoading(false)
+       }
    }
 
 
@@ -154,7 +217,7 @@ const Signup = () => {
   <Input type='file'
   p={1} 
   accept='image/*'
-  onChange={(e)=>setPhoto(e.target.files[0])}
+  onChange={(e)=>fileSelect(e.target.files[0])}
   />
 </FormControl>
 

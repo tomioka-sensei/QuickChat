@@ -8,21 +8,81 @@ import {
     InputRightElement,
     Button,
   } from '@chakra-ui/react'
+  import { useToast } from '@chakra-ui/react'
+  import {axios} from "axios"
+import {useHistory} from "react-router-dom"
 
   import { FaGoogle } from "react-icons/fa";
 
 
 const Login = () => {
-
   const[email , setEmail] = useState()
-
+  const[loading , setLoading ] = useState(false)
   const [pass, setPass] = useState()
 
   const [show , setShow] = useState(false)
 
+  const toast = useToast()
+  const history = useHistory();
+
   const clickHandler = ()=>{
     setShow(show=>!show)
    }
+
+   const submitHandler = async() =>{
+       if(!email || !pass){
+        toast({
+          title: 'Invalid Req.',
+          description: "all fields are required",
+          status: 'warning',
+          duration: 9000,
+          isClosable: true,
+        });
+
+        setLoading(false);
+
+        return;
+       };
+
+       try {
+
+        const config = {
+          'Content-Type': 'application/json'
+        }
+
+        const {data} = await axios.post(
+          "/api/user/login",
+          {email,pass},
+          config
+        );
+
+        toast({
+          title: 'atempt successful',
+          description: "login successful",
+          status: 'success',
+          duration: 9000,
+          isClosable: true,
+        });
+
+        localStorage.setItem("userInfo",JSON.stringify(data));
+        setLoading(false);
+        history.push("/chats");
+       }
+        catch (error) {
+
+        toast({
+          title: 'Invalid Req.',
+          description: error.response.data.message,
+          status: 'error',
+          duration: 9000,
+          isClosable: true,
+        });
+        setLoading(false);
+       }
+
+   };
+
+
 
 
   return (
