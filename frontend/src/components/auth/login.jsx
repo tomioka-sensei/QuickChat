@@ -8,22 +8,20 @@ import {
     InputRightElement,
     Button,
   } from '@chakra-ui/react'
-  import { useToast } from '@chakra-ui/react'
-  import {axios} from "axios"
-import {useHistory} from "react-router-dom"
+  import { useToast } from '@chakra-ui/react';
+  import axios from 'axios';
+  import { useNavigate } from 'react-router-dom';
 
   import { FaGoogle } from "react-icons/fa";
-
 
 const Login = () => {
   const[email , setEmail] = useState()
   const[loading , setLoading ] = useState(false)
   const [pass, setPass] = useState()
-
   const [show , setShow] = useState(false)
 
   const toast = useToast()
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const clickHandler = ()=>{
     setShow(show=>!show)
@@ -66,7 +64,7 @@ const Login = () => {
 
         localStorage.setItem("userInfo",JSON.stringify(data));
         setLoading(false);
-        history.push("/chats");
+        navigate("/chats");
        }
         catch (error) {
 
@@ -123,11 +121,22 @@ const Login = () => {
   
 </FormControl>
 
-<Button colorScheme='blue' variant='solid'>
+<Button colorScheme='blue' 
+variant='solid'
+onClick={submitHandler}
+isLoading = {loading}
+>
     Lets chat 
   </Button>
 
-  <Button colorScheme='red' variant='solid' gap={1}>
+  <Button 
+  colorScheme='red'
+   variant='solid'
+    gap={1}
+    onClick={()=>{
+      setEmail("guest@gmail.com");
+      setPass("1234")
+    }}>
      Go as guest
   </Button>
 

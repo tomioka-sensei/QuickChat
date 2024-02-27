@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import {  VStack , StackDivider , Box ,InputGroup } from '@chakra-ui/react'
 import { useToast } from '@chakra-ui/react'
-import {axios} from "axios"
-import {useHistory} from "react-router-dom"
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 
 import {
     FormControl,
@@ -29,7 +30,8 @@ const Signup = () => {
 
    const[loading , setLoading ] = useState(false)
    const toast = useToast()
-    const history = useHistory();
+   const navigate = useNavigate();
+
 
    const fileSelect = (pics)=>{
       setLoading(true)
@@ -129,7 +131,7 @@ const Signup = () => {
         });
            localStorage.setItem("userInfo",JSON.stringify(data));
            setLoading(false);
-           history.push("/chats")
+           navigate("/chats")
        } catch (error) {
         toast({
           title: 'Error',
