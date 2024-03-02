@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.route('/').post(protect, accessChat);
 
-// router.route('/').post(protect, fetchChats);
+router.route('/').post(protect, accessChat.fetchChats);
 
 // router.route('/group').post(protect , createGroupChat );
 
