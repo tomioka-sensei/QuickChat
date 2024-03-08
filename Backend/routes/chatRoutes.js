@@ -6,12 +6,12 @@ router.route('/').post(protect, accessChat);
 
 router.route('/').post(protect, accessChat.fetchChats);
 
-// router.route('/group').post(protect , createGroupChat );
+router.route('/group').post(protect , accessChat.createGroupChat );
 
-// router.route('/rename').put(protect,renameGroup);
+router.route('/rename').put(protect,accessChat.renameGroup);
 
-// router.route('/groupremove').put(protect , removeFromGroup);
+router.route('/groupremove').put(protect , accessChat.removeFromGroup);
 
-// router.route('/groupadd').put(protect ,addToGroup )
+router.route('/groupadd').put(protect ,accessChat.addToGroup )
 
 module.exports = router;
